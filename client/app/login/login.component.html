@@ -1,0 +1,38 @@
+<div class="login" *ngIf="!menuService.setup.signed">
+  <div class="login__wrap">
+    <h2 class="login__title">Sign In</h2>
+    <form class="login__form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <div class="input input--text">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <input type="email" name="user" required ngModel #user>
+        <label for="email">Email</label>
+      </div>
+      <div class="input input--text">
+        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+        <input type="password" name="password" required ngModel #password>
+        <label for="password">Password</label>
+      </div>
+      <div class="submit">
+        <button type="submit" class="button button--mr-small">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="" *ngIf="menuService.setup.signed">
+  <div class="team">
+    <div class="team__title">
+      Team settings
+    </div>
+    <div class="team__add">
+      <div class="input input--text" *ngFor="let member of menuService.team.users; let i = index;">
+        <i class="fa fa-user-o" aria-hidden="true"></i>
+        <input type="text" name="member" [(ngModel)]="menuService.team.users[i]">
+      </div>
+      <button type="button" name="button" class="button button--mr-small" (click)="addMember()">+</button>
+      <button type="button" name="button" class="button button--mr-small" (click)="saveTeam()">Save</button>
+    </div>
+  </div>
+  <div class="">
+    <button type="button" class="button button--mr-small button--exit" (click)="exit()">Exit</button>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="dashboard clear" *ngIf="menuService.setup.user && showStands">
+  <div class="" *ngIf="stands[0]">
+    <div class="dashboard__title">
+      Choose stand
+    </div>
+    <div class="clear">
+      <div *ngFor="let stand of stands; let i = index;" class="dashboard__stand" [ngClass]="{'dashboard__stand--active': i == active}" (click)="setActive(i, stand.src)">
+        {{stand.name}}
+        <div class="preloader" *ngIf="preloader && i == active" ></div>
+      </div>
+    </div>
+    <div class="clear dashboard__stand-actions">
+      <div class="dashboard__commands">
+        <hr>
+        <div class="dashboard__buttons">
+          <button *ngFor="let action of stands[active].commands; let j = index;" type="button" class="button" (click)="getSSHRequest(action.command)">{{action.title}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="clear dashboard__stand-repos">
+      <div class="input input--select">
+        <select id="branch" name="branch" class="dashboard__select-branch" (change)="changeBranch(stands[active].src, $event.target.value);">
+          <option value="master">master</option>
+          <option *ngFor="let repo of repos" [ngValue]="repo.name" [selected]="repo.name == activeBranch">{{repo.name}}</option>
+        </select>
+        <label for="branch"></label>
+      </div>
+    </div>
+  </div>
+  <div class="clear">
+    <div class="dashboard__popup-control">
+      <a href="#">Edit</a>/<a href="#">Create</a>
+    </div>
+    <form class="dashboard__create-stand-form" #standForm="ngForm" (ngSubmit)="onSubmit()">
+      <h3 class="heading heading--h3 dashboard__create-heading">Create</h3>
+      <div class="input input--text">
+        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+        <input type="text" name="name" required [(ngModel)]="block.name">
+        <label for="name">Name</label>
+      </div>
+      <div class="input input--text">
+        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+        <input type="text" name="url" required [(ngModel)]="block.url">
+        <label for="url">URL</label>
+      </div>
+      <br>
+      <div class="dashboard__comand-block" *ngFor="let command of block.commands; let k = index;">
+        <div class="input input--text">
+          <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+          <input type="text" name="title" required [(ngModel)]="block.commands[k].title">
+          <label for="title">Title</label>
+        </div>
+        <div class="input input--text">
+          <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+          <input type="text" name="command" required [(ngModel)]="block.commands[k].command">
+          <label for="command">Command</label>
+        </div>
+      </div>
+      <button type="button" name="button" class="button button--mr-small" (click)="addNewCommand()">+</button><button type="submit" class="button button--mr-small">Save</button>
+    </form>
+  </div>
+</div>

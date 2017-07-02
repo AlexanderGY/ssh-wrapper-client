@@ -1,0 +1,223 @@
+@font-face
+  font-family: 'Nero'
+  src: url('./libs/nero/nero.otf')
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300')
+html
+  position: relative
+  min-height: 100%
+body *
+  font-family: 'Open Sans Condensed', sans-serif
+body
+  padding: 0
+  margin: 0
+  font-family: 'Open Sans Condensed', sans-serif
+  font-size: 16px
+  color: #212121
+::-webkit-scrollbar
+  width: 0.5em
+  height: 0.5em
+::-webkit-scrollbar-thumb
+  background: #212121
+::-webkit-scrollbar-track
+  background: #b8c0c8
+.main
+  margin-top: 5px
+  min-height: calc(100vh - 150px)
+.hide
+  display: none
+@media screen and (max-width: 840px)
+  .hide
+    &--840
+      display: none !important
+  .block
+    width: 100% !important
+    padding: 0 !important
+  .shell
+    padding: 10px
+/**
+ * Adaptive model
+ */
+.shell
+  width: 100%
+  box-sizing: border-box
+  &:after
+    content: ''
+    display: block
+    clear: both
+.block
+  float: left
+  display: block
+  min-height: 1px
+  padding: 0.5em
+  box-sizing: border-box
+  position: relative
+  z-index: 1
+  &--1
+    width: 10%
+  &--2
+    width: 20%
+  &--3
+    width: 30%
+  &--4
+    width: 40%
+  &--5
+    width: 50%
+  &--6
+    width: 60%
+  &--8
+    width: 80%
+.card
+  width: 100%
+  min-height: 400px
+  display: block
+  padding: 1em
+  box-sizing: border-box
+  &--dark
+    background-color: #212121
+    color: #ffffff
+    transition: 0.3s
+@media screen and (max-width: 560px)
+  & .card
+    min-height: 100px
+body.light
+  background-color: #dddddd
+  .card
+    &--dark
+      background-color: #fafafa
+      color: #212121
+      transition: 0.3s
+  .footer
+    background-color: #ffffff
+    transition: 0.3s
+    &__copyright
+      color: #212121
+      transition: 0.3s
+.divider
+  width: 100%
+  height: 1px
+  clear: both
+  background: #212121
+.button
+  cursor: pointer
+  transition: 0.3s
+  opacity: 1
+  padding: 4px 15px 3px 15px
+  background-color: #cccccc
+  &:hover
+    transition: 0.3s
+    opacity: 0.7
+  &--mr-small
+    margin: 5px 0
+.input
+  &--select
+    position: relative
+    margin-bottom: 20px
+    label
+      position: absolute
+      top: 12px
+      left: 40px
+      pointer-events: none
+    i
+      position: absolute
+      top: 8px
+      left: 10px
+      font-size: 14px
+    select
+      width: 100%
+      background-image: url('app/arrow.svg')
+      background-size: 10px
+      background-repeat: no-repeat
+      background-position: 90% 85%
+      cursor: pointer
+      padding: 10px 30px 5px 10px
+      box-sizing: border-box
+      border-bottom: 1px solid #212121
+      background-color: transparent
+      line-height: 14px
+      font-size: 14px
+      transition: 0.3s
+      &.ng-dirty + label
+        top: 2px
+        transition: 0.3s
+        font-size: 9px
+  &--text
+    position: relative
+    label
+      position: absolute
+      top: 12px
+      left: 40px
+      pointer-events: none
+    i
+      position: absolute
+      top: 8px
+      left: 10px
+      font-size: 14px
+    input
+      width: 100%
+      padding: 10px 30px 5px 10px
+      border-left: 30px solid #cccccc
+      box-sizing: border-box
+      border-bottom: 1px solid #212121
+      background-color: transparent
+      line-height: 14px
+      font-size: 14px
+      transition: 0.3s
+      &.ng-dirty + label
+        top: 2px
+        transition: 0.3s
+        font-size: 9px
+  &--checkbox
+    & input:checked + label
+      color: red
+      background-color: red
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+	margin: 0
+	padding: 0
+	border: 0
+	font-size: 100%
+	vertical-align: baseline
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section
+	display: block
+.clear
+  &:after
+    display: block
+    content: ''
+    clear: both
+a
+  text-decoration: none
+  opacity: 1
+  transition: 0.3s
+  &:hover
+    transition: 0.3s
+    opacity: 0.7
+body
+	line-height: 1
+ol, ul
+	list-style: none
+blockquote, q
+	quotes: none
+blockquote:before, blockquote:after,
+q:before, q:after
+	content: ''
+	content: none
+table
+	border-collapse: collapse
+	border-spacing: 0
+button, input, select
+  border: none
+  outline: none
+  appearance: none
+  font-size: 16px
