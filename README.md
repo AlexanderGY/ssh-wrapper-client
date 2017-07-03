@@ -1,4 +1,4 @@
-Web ssh client
+SSH client
 
 git clone
 cd yigis
