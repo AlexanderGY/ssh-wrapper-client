@@ -10,25 +10,26 @@ export default Router()
   .put('/team', teamUpdate)
   .delete('/session', removeSession);
 
-export function errorHandler(err: any) {
-  throw new Error('DB connection or permission error. Traceback\n' + err);
-}
+  export function errorHandler(err, res) {
+    console.log('DB connection or permission error. Traceback:\n' + err);
+    res.status(500).send({error: err});
+  }
 
 export function teamUpdate(req: any, res: Response) {
   team.find({name: req.body.name}, (err, t) => {
     if (err) {
-      return errorHandler(err);
+      errorHandler(err, res);
     }
     if (t.length) {
       Object.assign(t[0], req.body);
       t[0].save(err => {
         if (err) {
-          return errorHandler(err);
+          errorHandler(err, res);
         }
         for (let i = 0; i < req.body.users.length; i++) {
             user.find({user: req.body.users[i]}, (err, r) => {
               if (err) {
-                return errorHandler(err);
+                errorHandler(err, res);
               }
               r[0].team = req.session.user.team;
               r[0].save();
@@ -42,7 +43,7 @@ export function teamUpdate(req: any, res: Response) {
       Object.assign(te, req.body);
       te.save(err => {
         if (err) {
-          return errorHandler(err);
+          errorHandler(err, res);
         }
         res.send({message: 'Created'});
       })
@@ -54,14 +55,18 @@ export function removeSession(req:any, res:Response) {
   req.session.user = {};
   req.session.destroy(err => {
     if (err) {
-      return errorHandler(err);
+      errorHandler(err, res);
     }
     res.send({message: 'Session destroyed'});
   })
 }
 
 export function userSettings(req:any, res: Response) {
-  res.send({data: req.session});
+  if (req.session) {
+    res.send({data: req.session});
+  } else {
+    errorHandler({error: 'Session undefined'}, res);
+  }
 }
 
 export function userLogin(req: Request, res: Response) {

@@ -19,7 +19,7 @@ import {NgPipesModule} from 'ngx-pipes';
 /**
  * Services
  */
-import { MenuService } from './header/menu.service';
+import { UserDataService } from './login/user-data.service';
 import { BackService } from './header/back.service';
 
 /**
@@ -52,7 +52,7 @@ const ROUTES = [
     NgbModule.forRoot(),
     FileUploadModule
   ],
-  providers: [MenuService, BackService],
+  providers: [UserDataService, BackService],
   bootstrap: [AppComponent],
   entryComponents: []
 })

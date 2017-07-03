@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './publish.component.html',
   styleUrls: ['./publish.component.styl']
 })
+
 export class PublishComponent {
 
 }

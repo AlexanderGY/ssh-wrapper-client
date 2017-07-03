@@ -1,5 +1,5 @@
 import { Component, OnInit, Pipe } from '@angular/core';
-import {MenuService} from './../header/menu.service';
+import {UserDataService} from './../login/user-data.service';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
@@ -8,26 +8,27 @@ import 'rxjs/add/operator/toPromise';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.styl']
 })
+
 export class DashboardComponent implements OnInit {
-  //TODO resolve this
-  stands:any = [];
-  repos:any = [];
+  //TODO resolve it
+  stands:Array<any> = [];
+  repos:Array<any> = [];
   activeBranch:string = '';
   active:number = 0;
   preloader:boolean = false;
   showStands:boolean = false;
   showMonitors:boolean = false;
-  block:any = {};
-  monitors:any = [];
+  block:any = null;
+  monitors:Array<any> = [];
   activeMonitor:any = null;
 
-  constructor(public menuService: MenuService, private http: Http) {}
+  constructor(public userDataService: UserDataService, private http: Http) {}
 
   ngOnInit() {
-    if (this.menuService.setup.user) {
+    if (this.userDataService.setup.user) {
       this.getStands();
     } else {
-      this.menuService.userLogged.subscribe(() => {
+      this.userDataService.userLogged.subscribe(() => {
         this.getStands();
       })
     }

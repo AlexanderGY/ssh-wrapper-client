@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MenuService} from './../header/menu.service';
+import {UserDataService} from './../login/user-data.service';
 import {Http, Headers} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
@@ -9,17 +9,18 @@ import 'rxjs/add/operator/toPromise';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.styl']
 })
+
 export class HomeComponent implements OnInit {
-  constructor(private menuService:MenuService, private http: Http) {}
-  
+  constructor(private userDataService:UserDataService, private http: Http) {}
+
   ngOnInit() {
     return this.http.get('/api/user/settings')
             .toPromise()
             .then(res => {
               if (res.json().data.user) {
-                this.menuService.setup = res.json().data.user;
-                this.menuService.team = res.json().data.user.list;
-                this.menuService.userLogin();
+                this.userDataService.setup = res.json().data.user;
+                this.userDataService.team = res.json().data.user.list;
+                this.userDataService.userLogin();
               }
             })
   }

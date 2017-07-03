@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuService } from './menu.service';
+import { UserDataService } from '../login/user-data.service';
 import { BackService } from './back.service';
 
 @Component({
@@ -7,8 +7,9 @@ import { BackService } from './back.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.styl']
 })
+
 export class HeaderComponent {
-  constructor(public menuService: MenuService, public colorService: BackService) {}
+  constructor(public userDataService: UserDataService, public colorService: BackService) {}
 
   goBack() {
 

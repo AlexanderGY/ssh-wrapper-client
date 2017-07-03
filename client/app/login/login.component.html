@@ -1,4 +1,4 @@
-<div class="login" *ngIf="!menuService.setup.signed">
+<div class="login" *ngIf="!userDataService.setup.signed">
   <div class="login__wrap">
     <h2 class="login__title">Sign In</h2>
     <form class="login__form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
@@ -18,15 +18,15 @@
     </form>
   </div>
 </div>
-<div class="" *ngIf="menuService.setup.signed">
+<div class="" *ngIf="userDataService.setup.signed">
   <div class="team">
     <div class="team__title">
       Team settings
     </div>
     <div class="team__add">
-      <div class="input input--text" *ngFor="let member of menuService.team.users; let i = index;">
+      <div class="input input--text" *ngFor="let member of userDataService.team.users; let i = index;">
         <i class="fa fa-user-o" aria-hidden="true"></i>
-        <input type="text" name="member" [(ngModel)]="menuService.team.users[i]">
+        <input type="text" name="member" [(ngModel)]="userDataService.team.users[i]">
       </div>
       <button type="button" name="button" class="button button--mr-small" (click)="addMember()">+</button>
       <button type="button" name="button" class="button button--mr-small" (click)="saveTeam()">Save</button>

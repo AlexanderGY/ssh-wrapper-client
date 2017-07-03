@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {User} from './user.class';
 import {Http, Headers} from '@angular/http';
-import {MenuService} from './../header/menu.service';
+import {UserDataService} from './user-data.service';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -10,14 +10,15 @@ import 'rxjs/add/operator/toPromise';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.styl']
 })
+
 export class LoginComponent {
 
-  constructor(private http: Http, public menuService: MenuService) {
-    this.menuService.setup = {
+  constructor(private http: Http, public userDataService: UserDataService) {
+    this.userDataService.setup = {
       user: '',
       signed: false
     };
-    this.menuService.team = {
+    this.userDataService.team = {
       users: [
         ''
       ]
@@ -32,23 +33,23 @@ export class LoginComponent {
             if (data.error) {
               console.log('Password or login incorrect');
             } else {
-              this.menuService.team = data.list;
-              this.menuService.setup = {
+              this.userDataService.team = data.list;
+              this.userDataService.setup = {
                 signed: true,
                 user: data.user,
                 isAdmin: data.isAdmin
               };
-              this.menuService.userLogin();
+              this.userDataService.userLogin();
             }
           });
   }
 
   addMember() {
-    this.menuService.team.users.push('');
+    this.userDataService.team.users.push('');
   }
 
   saveTeam() {
-    return this.http.put('/api/user/team', {name: this.menuService.setup.team, users: this.menuService.team.users})
+    return this.http.put('/api/user/team', {name: this.userDataService.setup.team, users: this.userDataService.team.users})
           .toPromise()
           .then(res => {
             console.log(res);
@@ -56,8 +57,8 @@ export class LoginComponent {
   }
 
   exit() {
-    this.menuService.setup.signed = false;
-    this.menuService.clear();
+    this.userDataService.setup.signed = false;
+    this.userDataService.clear();
     return this.http.delete('/api/user/session')
           .toPromise()
           .then(res => {

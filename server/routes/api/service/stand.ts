@@ -15,7 +15,7 @@ export default Router()
   .post('/stand', createStand)
   .post('/active-branch', getActiveBranch)
   .put('/change-branch', changeBranch)
-  .get('/stands', getstands);
+  .get('/stands', getStands);
 
 export function errorHandler(err, res) {
   console.log('DB connection or permission error. Traceback:\n' + err);
@@ -29,17 +29,17 @@ export function createStand(req: any, res: Response) {
   Object.assign(newStand, data);
   stand.find({name: data.name}, (err, d) => {
     if (err) {
-      return errorHandler(err, res);
+      errorHandler(err, res);
     }
     if (d[0]) {
       Object.assign(d[0], data);
       d[0].save(err => {
         if (err) {
-          return errorHandler(err, res);
+          errorHandler(err, res);
         }
         stand.find({team: req.session.user.team}, (err, allStands) => {
           if (err) {
-            return errorHandler(err, res);
+            errorHandler(err, res);
           }
           res.send({data: allStands});
         })
@@ -47,11 +47,11 @@ export function createStand(req: any, res: Response) {
     } else {
       newStand.save((err) => {
         if (err) {
-          return errorHandler(err, res);
+          errorHandler(err, res);
         }
         stand.find({team: req.session.user.team}, (err, allStands) => {
           if (err) {
-            return errorHandler(err, res);
+            errorHandler(err, res);
           }
           res.send({data: allStands});
         })
@@ -61,44 +61,59 @@ export function createStand(req: any, res: Response) {
 }
 
 export function getActiveBranch(req: any, res: Response) {
-  let ssh = new SSH(config.config.ssh);
-  let command = req.body.src + ' && git branch | grep \\* | cut -d \' \' -f2';
-  let active;
-  ssh.exec(command, {
-      out: (stdout) => {
-        active = stdout;
-      },
-      err: (err) => {
-        if (err) {
-          return errorHandler(err, res);
+  if (req.session.user.team) {
+    let ssh = new SSH(config.config.ssh);
+    let command = req.body.src + ' && git branch | grep \\* | cut -d \' \' -f2';
+    if (!req.body.src) {
+      res.send({error: 'Comamnd not found'});
+      return;
+    }
+    let active;
+    ssh.exec(command, {
+        out: (stdout) => {
+          active = stdout;
+        },
+        err: (err) => {
+          if (err) {
+            errorHandler(err, res);
+          }
+        },
+        exit: (code) => {
+          res.status(200).send({active: active});
         }
-      },
-      exit: (code) => {
-        res.status(200).send({active: active});
-      }
-  })
-  .start();
+    })
+    .start();
+  } else {
+    res.send({error: 'Access denied'});
+  }
 }
 
 export function changeBranch(req: any, res: Response) {
-  let ssh = new SSH(config.config.ssh);
-  let command = req.body.stand + ' && git pull && git checkout ' + req.body.branch;
-  ssh.exec(command, {
-      err: (err) => {
-        if (err) {
-          return errorHandler(err, res);
+  if (req.session.user.team) {
+    let ssh = new SSH(config.config.ssh);
+    let command = req.body.stand + ' && git pull && git checkout ' + req.body.branch;
+    if (!req.body.stand || !req.body.branch) {
+      res.send({error: 'Comamnd not found'});
+      return;
+    }
+    ssh.exec(command, {
+        err: (err) => {
+          if (err) {
+            errorHandler(err, res);
+          }
+        },
+        exit: (code) => {
+          res.status(200).send();
         }
-      },
-      exit: (code) => {
-        res.status(200).send();
-      }
-  })
-  .start();
+    })
+    .start();
+  } else {
+    res.send({error: 'Access denied'});
+  }
 }
 
-export function getstands(req: any, res: Response) {
+export function getStands(req: any, res: Response) {
   if (req.session.user.user) {
-
     stand.find({team: req.session.user.team}, (err, data) => {
       if (data) {
         let client = github.client(config.config.git);
@@ -112,7 +127,7 @@ export function getstands(req: any, res: Response) {
             },
             err: (err) => {
               if (err) {
-                return errorHandler(err, res);
+                errorHandler(err, res);
               }
             },
             exit: (code) => {
@@ -120,7 +135,7 @@ export function getstands(req: any, res: Response) {
 
               targr.branches({per_page: 1000}, (err, dt) => {
                 if (err) {
-                  return errorHandler(err, res);
+                  errorHandler(err, res);
                 }
                 if (!err && req.session.user.team) {
                   res.send({data: data, repos: dt, active: active});
@@ -142,7 +157,10 @@ export function handleStand(req: any, res: Response) {
   if (req.session.user.team) {
     let ssh = new SSH(config.config.ssh);
     let command = req.body.command;
-
+    if (!command) {
+      res.send({error: 'Comamnd not found'});
+      return;
+    }
     const toLog = {
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
       command: command,
@@ -155,7 +173,7 @@ export function handleStand(req: any, res: Response) {
     ssh.exec(command, {
         err: (err) => {
           if (err) {
-            return errorHandler(err, res);
+            errorHandler(err, res);
           }
         },
         exit: (code) => {
@@ -163,5 +181,7 @@ export function handleStand(req: any, res: Response) {
         }
     })
     .start();
+  } else {
+    res.send({error: 'Access denied'});
   }
 }
